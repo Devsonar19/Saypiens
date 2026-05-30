@@ -8,11 +8,13 @@ import 'join_dialog.dart';
 class TopNavBar extends StatelessWidget {
   final VoidCallback onGatheringsTap;
   final VoidCallback onSocialsTap;
+  final VoidCallback onAboutTap;
 
   const TopNavBar({
     super.key,
     required this.onGatheringsTap,
     required this.onSocialsTap,
+    required this.onAboutTap,
   });
 
   @override
@@ -51,6 +53,11 @@ class TopNavBar extends StatelessWidget {
                     ),
                     const SizedBox(width: 20),
                     TextButton(
+                      onPressed: onAboutTap,
+                      child: const Text('About', style: TextStyle(color: AppColors.textPrimary)),
+                    ),
+                    const SizedBox(width: 20),
+                    TextButton(
                       onPressed: onSocialsTap,
                       child: const Text('Socials', style: TextStyle(color: AppColors.textPrimary)),
                     ),
@@ -75,6 +82,7 @@ class TopNavBar extends StatelessWidget {
                   ),
                   onSelected: (value) {
                     if (value == 'gatherings') onGatheringsTap();
+                    if (value == 'about') onAboutTap();
                     if (value == 'socials') onSocialsTap();
                     if (value == 'join') _showJoinDialog(context);
                   },
@@ -82,6 +90,10 @@ class TopNavBar extends StatelessWidget {
                     const PopupMenuItem(
                       value: 'gatherings',
                       child: Text('Gatherings', style: TextStyle(color: AppColors.textPrimary)),
+                    ),
+                    const PopupMenuItem(
+                      value: 'about',
+                      child: Text('About', style: TextStyle(color: AppColors.textPrimary)),
                     ),
                     const PopupMenuItem(
                       value: 'socials',
