@@ -51,7 +51,7 @@ class SocialsSection extends StatelessWidget {
               _HoverSocialChip(
                   icon: FontAwesomeIcons.instagram, label: 'Instagram', 
                   onTap: () {
-                _launchSocial("https://www.instagram.com/saypiens_1/");
+                _launchSocial("https://www.instagram.com/saypienss/");
               }),
               _HoverSocialChip(
                   icon: FontAwesomeIcons.xTwitter, label: 'X', 
