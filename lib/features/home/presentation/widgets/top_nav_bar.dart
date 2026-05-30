@@ -5,7 +5,7 @@ import '../../../../theme/app_color.dart';
 import '../../../../utils/responsive_layout.dart';
 import 'join_dialog.dart';
 
-class TopNavBar extends StatelessWidget {
+class TopNavBar extends StatefulWidget {
   final VoidCallback onGatheringsTap;
   final VoidCallback onSocialsTap;
   final VoidCallback onAboutTap;
@@ -16,6 +16,16 @@ class TopNavBar extends StatelessWidget {
     required this.onSocialsTap,
     required this.onAboutTap,
   });
+
+  @override
+  State<TopNavBar> createState() => _TopNavBarState();
+}
+
+class _TopNavBarState extends State<TopNavBar> {
+  bool _isGatheringsHovered = false;
+  bool _isAboutHovered = false;
+  bool _isSocialsHovered = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,18 +58,42 @@ class TopNavBar extends StatelessWidget {
                 Row(
                   children: [
                     TextButton(
-                      onPressed: onGatheringsTap,
-                      child: const Text('Gatherings', style: TextStyle(color: AppColors.textPrimary)),
+                      onPressed: widget.onGatheringsTap,
+                      onHover: (hovering) {
+                        setState(() => _isGatheringsHovered = hovering);
+                      },
+                      child: Text(
+                        'Gatherings',
+                        style: TextStyle(
+                          color: _isGatheringsHovered ? AppColors.golden : AppColors.textPrimary,
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 20),
                     TextButton(
-                      onPressed: onAboutTap,
-                      child: const Text('About', style: TextStyle(color: AppColors.textPrimary)),
+                      onPressed: widget.onAboutTap,
+                      onHover: (hovering) {
+                        setState(() => _isAboutHovered = hovering);
+                      },
+                      child: Text(
+                        'About',
+                        style: TextStyle(
+                          color: _isAboutHovered ? AppColors.golden : AppColors.textPrimary,
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 20),
                     TextButton(
-                      onPressed: onSocialsTap,
-                      child: const Text('Socials', style: TextStyle(color: AppColors.textPrimary)),
+                      onPressed: widget.onSocialsTap,
+                      onHover: (hovering) {
+                        setState(() => _isSocialsHovered = hovering);
+                      },
+                      child: Text(
+                        'Socials',
+                        style: TextStyle(
+                          color: _isSocialsHovered ? AppColors.golden : AppColors.textPrimary,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -81,9 +115,9 @@ class TopNavBar extends StatelessWidget {
                     side: BorderSide(color: AppColors.golden.withOpacity(0.3)),
                   ),
                   onSelected: (value) {
-                    if (value == 'gatherings') onGatheringsTap();
-                    if (value == 'about') onAboutTap();
-                    if (value == 'socials') onSocialsTap();
+                    if (value == 'gatherings') widget.onGatheringsTap();
+                    if (value == 'about') widget.onAboutTap();
+                    if (value == 'socials') widget.onSocialsTap();
                     if (value == 'join') _showJoinDialog(context);
                   },
                   itemBuilder: (BuildContext context) => [
