@@ -15,9 +15,11 @@ class HeroSection extends StatefulWidget {
 class _HeroSectionState extends State<HeroSection> {
   bool _isHovered = false;
 
+
   @override
   Widget build(BuildContext context) {
-    final isMobile = ResponsiveLayout.isMobile(context);
+    final isMobile = MediaQuery.of(context).size.width < 768;
+    final shouldGlow = _isHovered || isMobile;
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.7,
@@ -42,17 +44,17 @@ class _HeroSectionState extends State<HeroSection> {
                   duration: const Duration(milliseconds: 300),
                   padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
                   decoration: BoxDecoration(
-                    color: _isHovered
+                    color: shouldGlow
                         ? AppColors.golden.withOpacity(0.15)
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(30),
                     border: Border.all(
-                      color: _isHovered
+                      color: shouldGlow
                           ? AppColors.golden
                           : AppColors.golden.withOpacity(0.5),
                       width: 2,
                     ),
-                    boxShadow: _isHovered
+                    boxShadow: shouldGlow
                         ? [
                       BoxShadow(
                         color: AppColors.golden.withOpacity(0.3),
