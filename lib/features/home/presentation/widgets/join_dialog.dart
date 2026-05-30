@@ -18,6 +18,8 @@ class _JoinSaypienDialogState extends State<JoinSaypienDialog> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _mobileController = TextEditingController();
+  final _ageController = TextEditingController();
   final _reasonController = TextEditingController();
   final _instagramController = TextEditingController();
 
@@ -25,6 +27,8 @@ class _JoinSaypienDialogState extends State<JoinSaypienDialog> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
+    _mobileController.dispose();
+    _ageController.dispose();
     _reasonController.dispose();
     _instagramController.dispose();
     super.dispose();
@@ -33,10 +37,11 @@ class _JoinSaypienDialogState extends State<JoinSaypienDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Colors.black.withValues(alpha: 0.9), // Deep, sleek black
+      // Changed to a premium charcoal/dark grey instead of deep black
+      backgroundColor: const Color(0xFF1C1C1E),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: AppColors.golden.withValues(alpha: 0.3), width: 1), // Golden outer border
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(color: AppColors.golden.withValues(alpha: 0.4), width: 1),
       ),
       child: BlocConsumer<HomeBloc, HomeState>(
         listener: (context, state) {
@@ -56,7 +61,7 @@ class _JoinSaypienDialogState extends State<JoinSaypienDialog> {
         },
         builder: (context, state) {
           return Container(
-            constraints: const BoxConstraints(maxWidth: 500),
+            constraints: const BoxConstraints(maxWidth: 550),
             padding: const EdgeInsets.all(32.0),
             child: Form(
               key: _formKey,
@@ -65,19 +70,40 @@ class _JoinSaypienDialogState extends State<JoinSaypienDialog> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    // Logo
                     Image.asset(
                       'assets/images/transparent_logo2.png',
-                      height: 300, // Adjusted height for better form balance
+                      height: 120,
                       fit: BoxFit.contain,
                       color: AppColors.golden,
                     ),
+                    const SizedBox(height: 16),
+
+                    // Welcome Text
+                    Text(
+                      'Join the Community',
+                      style: GoogleFonts.playfairDisplay(
+                        color: AppColors.golden,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Tell us a little about yourself.',
+                      style: TextStyle(
+                        color: Colors.white70, // Lighter, crisper subtitle
+                        fontSize: 14,
+                      ),
+                    ),
                     const SizedBox(height: 32),
+
                     // Name Field
                     TextFormField(
                       controller: _nameController,
-                      style: const TextStyle(color: AppColors.textPrimary),
+                      style: const TextStyle(color: Colors.white, fontSize: 15), // Crisp white text
                       cursorColor: AppColors.golden,
-                      decoration: _inputDecoration('Name*'),
+                      decoration: _inputDecoration('Full Name*', Icons.person_outline),
                       validator: (val) => val != null && val.isEmpty ? 'Required' : null,
                     ),
                     const SizedBox(height: 20),
@@ -85,19 +111,55 @@ class _JoinSaypienDialogState extends State<JoinSaypienDialog> {
                     // Email Field
                     TextFormField(
                       controller: _emailController,
-                      style: const TextStyle(color: AppColors.textPrimary),
+                      style: const TextStyle(color: Colors.white, fontSize: 15),
                       cursorColor: AppColors.golden,
-                      decoration: _inputDecoration('Email*'),
-                      validator: (val) => val != null && !val.contains('@') ? 'Enter valid email' : null,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: _inputDecoration('Email*', Icons.email_outlined),
+                      validator: (val) => val != null && !val.contains('@') ? 'Enter a valid email' : null,
                     ),
                     const SizedBox(height: 20),
 
-                    //Instagram Field
+                    // Mobile and Age Fields (Side by Side)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: TextFormField(
+                            controller: _mobileController,
+                            style: const TextStyle(color: Colors.white, fontSize: 15),
+                            cursorColor: AppColors.golden,
+                            keyboardType: TextInputType.phone,
+                            decoration: _inputDecoration('Mobile Number*', Icons.phone_outlined),
+                            validator: (val) => val != null && val.length < 10 ? 'Invalid number' : null,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          flex: 2,
+                          child: TextFormField(
+                            controller: _ageController,
+                            style: const TextStyle(color: Colors.white, fontSize: 15),
+                            cursorColor: AppColors.golden,
+                            keyboardType: TextInputType.number,
+                            decoration: _inputDecoration('Age*', Icons.cake_outlined),
+                            validator: (val) {
+                              if (val == null || val.isEmpty) return 'Required';
+                              if (int.tryParse(val) == null) return 'Invalid';
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Instagram Field
                     TextFormField(
                       controller: _instagramController,
-                      style: const TextStyle(color: AppColors.textPrimary),
+                      style: const TextStyle(color: Colors.white, fontSize: 15),
                       cursorColor: AppColors.golden,
-                      decoration: _inputDecoration('Instagram'),
+                      decoration: _inputDecoration('Instagram ID', Icons.alternate_email),
                     ),
                     const SizedBox(height: 20),
 
@@ -105,9 +167,9 @@ class _JoinSaypienDialogState extends State<JoinSaypienDialog> {
                     TextFormField(
                       controller: _reasonController,
                       maxLines: 3,
-                      style: const TextStyle(color: AppColors.textPrimary),
+                      style: const TextStyle(color: Colors.white, fontSize: 15),
                       cursorColor: AppColors.golden,
-                      decoration: _inputDecoration('Why do you want to join?*'),
+                      decoration: _inputDecoration('Why do you want to join?*', Icons.edit_note),
                       validator: (val) => val != null && val.isEmpty ? 'Required' : null,
                     ),
                     const SizedBox(height: 32),
@@ -119,10 +181,11 @@ class _JoinSaypienDialogState extends State<JoinSaypienDialog> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.golden,
-                          foregroundColor: Colors.black, // Dark text on golden button
+                          foregroundColor: Colors.black,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(12),
                           ),
+                          elevation: 0,
                         ),
                         onPressed: state is HomeFormLoading
                             ? null
@@ -131,9 +194,10 @@ class _JoinSaypienDialogState extends State<JoinSaypienDialog> {
                             final user = SaypienUserModel(
                               name: _nameController.text.trim(),
                               email: _emailController.text.trim(),
+                              mobile: _mobileController.text.trim(),
+                              age: int.parse(_ageController.text.trim()),
                               reason: _reasonController.text.trim(),
                               insta: _instagramController.text.trim(),
-
                             );
                             context.read<HomeBloc>().add(SubmitSaypienForm(user));
                           }
@@ -142,15 +206,15 @@ class _JoinSaypienDialogState extends State<JoinSaypienDialog> {
                             ? const SizedBox(
                           height: 24,
                           width: 24,
-                          child: CircularProgressIndicator(color: Colors.black, strokeWidth: 2),
+                          child: CircularProgressIndicator(color: Colors.black, strokeWidth: 2.5),
                         )
                             : const Text(
-                            'Join Now',
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1.2
-                            )
+                          'Submit Application',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.1,
+                          ),
                         ),
                       ),
                     ),
@@ -164,28 +228,41 @@ class _JoinSaypienDialogState extends State<JoinSaypienDialog> {
     );
   }
 
-  // The updated input decoration for the golden theme
-  InputDecoration _inputDecoration(String label) {
+  InputDecoration _inputDecoration(String label, IconData icon) {
     return InputDecoration(
       labelText: label,
-      labelStyle: TextStyle(color: AppColors.textPrimary.withValues(alpha: 0.5)),
+      labelStyle: const TextStyle(color: Colors.white60, fontSize: 13), // Slightly smaller label
+
+      // Reduced icon size to 18
+      prefixIcon: Icon(icon, color: AppColors.golden.withValues(alpha: 0.8), size: 18),
+
+      // THIS IS THE MAGIC FIX: Shrinks the invisible box around the icon
+      prefixIconConstraints: const BoxConstraints(
+        minWidth: 36,
+        minHeight: 36,
+      ),
+
       filled: true,
-      fillColor: Colors.white.withValues(alpha: 0.05), // Very slight highlight inside the field
+      fillColor: Colors.white.withValues(alpha: 0.06),
+
+      // Tighter padding to give the text more breathing room
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: AppColors.textPrimary.withValues(alpha: 0.2)),
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.15)),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: AppColors.golden, width: 2),
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.golden, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: Colors.red.shade400),
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.red.shade300.withValues(alpha: 0.5)),
       ),
       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: Colors.red.shade400, width: 2),
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.red.shade300, width: 1.5),
       ),
     );
   }
