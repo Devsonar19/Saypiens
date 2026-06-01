@@ -10,6 +10,7 @@ import 'package:saypiens/theme/app_color.dart';
 import 'features/home/presentation/widgets/about_us.dart';
 import 'features/home/presentation/widgets/hero_main_section.dart';
 import 'features/home/presentation/widgets/top_nav_bar.dart';
+import 'features/splash/presenstation/pages/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +43,7 @@ class SaypiensApp extends StatelessWidget {
           theme: ThemeData(
             useMaterial3: true,
           ),
-          home: HomePage(),
+          home: const SplashScreen(),
         ),
       ),
     );
