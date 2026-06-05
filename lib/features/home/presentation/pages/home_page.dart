@@ -29,31 +29,17 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  // We go back to the basic, native smooth scroll.
-  // No math needed because the offset is handled by our layout structure!
+  // THE FIX: We go back to the basic, native smooth scroll.
+  // No math needed because the 100px offset is handled by the SizedBoxes in the layout!
   void _scrollTo(GlobalKey key) {
     final context = key.currentContext;
     if (context == null) return;
 
-    if (!_scrollController.hasClients) return;
-
-    try {
-      final RenderBox box = context.findRenderObject() as RenderBox;
-      final RenderAbstractViewport viewport = RenderAbstractViewport.of(box);
-      final RevealedOffset offset = viewport.getOffsetToReveal(box, 0.0);
-
-      // Subtract 100px for the navbar height + 20px for extra breathing room
-      const double navbarGap = 120.0;
-      final double target = offset.offset - navbarGap;
-
-      _scrollController.animateTo(
-        target.clamp(0.0, _scrollController.position.maxScrollExtent),
-        duration: const Duration(milliseconds: 1000),
-        curve: Curves.easeOutExpo,
-      );
-    } catch (e) {
-      debugPrint("Scroll error: $e");
-    }
+    Scrollable.ensureVisible(
+      context,
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.easeOutExpo,
+    );
   }
 
   @override
@@ -62,58 +48,42 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: AppColors.black,
       body: Stack(
         children: [
-          // 1. Ambient Gradient Background
-          Container(
-            decoration: const BoxDecoration(
-              gradient: RadialGradient(
-                center: Alignment(-0.8, -0.6),
-                radius: 1.5,
-                colors: [
-                  AppColors.forestGreen,
-                  AppColors.black,
-                  AppColors.royalBlue,
-                  AppColors.black,
-                  AppColors.burgundy,
-                ],
-                stops: [0.0, 0.4, 0.6, 0.8, 1.0],
-              ),
+          // 1. Background Image
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/main_bg.jpeg',
+              fit: BoxFit.cover,
             ),
           ),
-          Container(color: AppColors.black.withOpacity(0.85)),
+          Container(color: AppColors.black.withOpacity(0.7)),
 
           // 2. Scrollable Content
           SingleChildScrollView(
             controller: _scrollController,
             child: Column(
               children: [
-                const SizedBox(height: 150),
+                const SizedBox(height: 100),
 
                 // Hero Section
                 const HeroSection(),
 
                 // --- GATHERINGS ANCHOR ---
-                // This invisible 1px box is what Flutter scrolls to!
-                SizedBox(key: _gatheringsKey, height: 500),
-                // This 100px space serves two purposes:
-                // 1. Natural spacing between the Hero and Gatherings section.
-                // 2. The exact clearance needed so the navbar doesn't cover the glass pane!
-                const SizedBox(height: 300),
-
-                const ScrollReveal(child: GatheringsSection()), // Removed the key from here
+                SizedBox(key: _gatheringsKey, height: 1),
+                const SizedBox(height: 100), // Acts as both layout gap and navbar clearance
+                const ScrollReveal(child: GatheringsSection()),
 
                 // --- SOCIALS ANCHOR ---
-                SizedBox(key: _socialsKey, height: 10),
-                const SizedBox(height: 150),
-
-                const ScrollReveal(child: SocialsSection()), // Removed the key from here
+                SizedBox(key: _socialsKey, height: 1),
+                const SizedBox(height: 100),
+                const ScrollReveal(child: SocialsSection()),
 
                 // --- ABOUT ANCHOR ---
-                SizedBox(key: _aboutKey, height: 10),
-                const SizedBox(height: 150),
+                // THE FIX: Standardized this back to 1px anchor + 100px gap so it matches the others!
+                SizedBox(key: _aboutKey, height: 1),
+                const SizedBox(height: 100),
+                const ScrollReveal(child: StorySection()),
 
-                const ScrollReveal(child: StorySection()), // Removed the key from here
-
-                const SizedBox(height: 200), // Extra breathing room at the bottom
+                const SizedBox(height: 150), // Extra breathing room at the very bottom
               ],
             ),
           ),
