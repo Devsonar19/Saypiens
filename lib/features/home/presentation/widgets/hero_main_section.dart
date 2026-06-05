@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../theme/app_color.dart';
-import '../../../../utils/responsive_layout.dart';
 import 'join_dialog.dart';
 import '../../../../core/app_constants.dart';
+import 'dart:ui';
 
 class HeroSection extends StatefulWidget {
   const HeroSection({super.key});
@@ -12,33 +12,27 @@ class HeroSection extends StatefulWidget {
   State<HeroSection> createState() => _HeroSectionState();
 }
 
-// 1. Add SingleTickerProviderStateMixin to allow animations
 class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStateMixin {
   bool _isHovered = false;
-
-  // 2. Declare animation variables
   late AnimationController _shimmerController;
   late Animation<double> _shimmerAnimation;
 
   @override
   void initState() {
     super.initState();
-
-    // 3. Initialize the controller to loop back and forth seamlessly
     _shimmerController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2), // Adjust for faster/slower pulse
+      duration: const Duration(seconds: 3),
     )..repeat(reverse: true);
 
-    // 4. Set the minimum and maximum opacity/spread for the glow
-    _shimmerAnimation = Tween<double>(begin: 0.1, end: 0.5).animate(
-      CurvedAnimation(parent: _shimmerController, curve: Curves.easeInOut),
+    _shimmerAnimation = Tween<double>(begin: 0.1, end: 0.4).animate(
+      CurvedAnimation(parent: _shimmerController, curve: Curves.easeInOutSine),
     );
   }
 
   @override
   void dispose() {
-    _shimmerController.dispose(); // Always clean up controllers!
+    _shimmerController.dispose();
     super.dispose();
   }
 
@@ -52,82 +46,63 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Glowing Button
           MouseRegion(
             onEnter: (_) => setState(() => _isHovered = true),
             onExit: (_) => setState(() => _isHovered = false),
             child: GestureDetector(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (_) => const JoinSaypienDialog(),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(50.0),
-                // 5. Wrap the container in AnimatedBuilder to rebuild on animation ticks
-                child: AnimatedBuilder(
-                  animation: _shimmerAnimation,
-                  builder: (context, child) {
-                    // Calculate dynamic values based on screen size
-                    final double currentGlowOpacity = isMobile ? _shimmerAnimation.value : (_isHovered ? 0.3 : 0.0);
-                    final double currentBgOpacity = isMobile ? (_shimmerAnimation.value * 0.4) : (_isHovered ? 0.15 : 0.0);
-                    final double currentBlur = isMobile ? 20 + (_shimmerAnimation.value * 20) : 30;
-                    final double currentSpread = isMobile ? (_shimmerAnimation.value * 6) : 2;
-                    final bool shouldShowEffects = isMobile || _isHovered;
+              onTap: () => showDialog(context: context, builder: (_) => const JoinSaypienDialog()),
+              child: AnimatedBuilder(
+                animation: _shimmerAnimation,
+                builder: (context, child) {
+                  final double glow = isMobile ? _shimmerAnimation.value : (_isHovered ? 0.3 : 0.0);
+                  final bool active = isMobile || _isHovered;
 
-                    return AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
-                      decoration: BoxDecoration(
-                        color: shouldShowEffects
-                            ? AppColors.golden.withOpacity(currentBgOpacity)
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                          color: shouldShowEffects
-                              ? AppColors.golden
-                              : AppColors.golden.withOpacity(0.5),
-                          width: 2,
+                  return Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(40),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          padding: const EdgeInsets.symmetric(horizontal: 56, vertical: 28),
+                          decoration: BoxDecoration(
+                            color: AppColors.platinum.withOpacity(0.02),
+                            borderRadius: BorderRadius.circular(40),
+                            border: Border.all(
+                              color: active ? AppColors.golden : AppColors.platinum.withOpacity(0.15),
+                              width: 1.5,
+                            ),
+                            boxShadow: active
+                                ? [BoxShadow(color: AppColors.golden.withOpacity(glow), blurRadius: 40, spreadRadius: 5)]
+                                : [],
+                          ),
+                          child: child,
                         ),
-                        boxShadow: shouldShowEffects
-                            ? [
-                          BoxShadow(
-                            color: AppColors.golden.withOpacity(currentGlowOpacity),
-                            blurRadius: currentBlur,
-                            spreadRadius: currentSpread,
-                          )
-                        ]
-                            : [],
                       ),
-                      child: child,
-                    );
-                  },
-                  // Pass the text as a static child so Flutter doesn't rebuild it every frame
-                  child: Text(
-                    'BECOME A SAYPIEN',
-                    style: GoogleFonts.playfairDisplay(
-                      color: AppColors.textPrimary,
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2,
                     ),
+                  );
+                },
+                child: Text(
+                  'BECOME A SAYPIEN',
+                  style: GoogleFonts.lato(
+                    color: AppColors.platinum,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w300, // Minimalistic, thin weight
+                    letterSpacing: 6,
                   ),
                 ),
               ),
             ),
           ),
-
-          const SizedBox(height: 32),
-
-          // Subtitle
-          const Text(
+          const SizedBox(height: 48),
+          Text(
             AppConstants.heroSubtitle,
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 24,
+            style: GoogleFonts.playfairDisplay(
+              color: AppColors.platinum.withOpacity(0.6),
+              fontSize: 22,
               fontStyle: FontStyle.italic,
-              letterSpacing: 4,
+              letterSpacing: 2,
             ),
           ),
         ],

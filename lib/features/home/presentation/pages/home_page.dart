@@ -1,50 +1,136 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
-import 'package:saypiens/features/home/presentation/widgets/about_us.dart';
+import '../widgets/about_us.dart';
 import '../widgets/gathering_section.dart';
 import '../widgets/hero_main_section.dart';
 import '../widgets/top_nav_bar.dart';
-import '../widgets/hero_main_section.dart';
-import '../widgets/gathering_section.dart';
 import '../widgets/socials_section.dart';
+import '../widgets/scroll_reveal.dart';
+import '../../../../theme/app_color.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
-  // Keys for smooth scrolling
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  // The keys will now be attached to our invisible anchor points!
   final GlobalKey _gatheringsKey = GlobalKey();
   final GlobalKey _socialsKey = GlobalKey();
   final GlobalKey _aboutKey = GlobalKey();
 
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  // We go back to the basic, native smooth scroll.
+  // No math needed because the offset is handled by our layout structure!
   void _scrollTo(GlobalKey key) {
     final context = key.currentContext;
-    if (context != null) {
-      Scrollable.ensureVisible(
-        context,
-        duration: const Duration(milliseconds: 800),
-        curve: Curves.easeInOutCubic,
+    if (context == null) return;
+
+    if (!_scrollController.hasClients) return;
+
+    try {
+      final RenderBox box = context.findRenderObject() as RenderBox;
+      final RenderAbstractViewport viewport = RenderAbstractViewport.of(box);
+      final RevealedOffset offset = viewport.getOffsetToReveal(box, 0.0);
+
+      // Subtract 100px for the navbar height + 20px for extra breathing room
+      const double navbarGap = 120.0;
+      final double target = offset.offset - navbarGap;
+
+      _scrollController.animateTo(
+        target.clamp(0.0, _scrollController.position.maxScrollExtent),
+        duration: const Duration(milliseconds: 1000),
+        curve: Curves.easeOutExpo,
       );
+    } catch (e) {
+      debugPrint("Scroll error: $e");
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF3E3F29), // Main background
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            TopNavBar(
+      backgroundColor: AppColors.black,
+      body: Stack(
+        children: [
+          // 1. Ambient Gradient Background
+          Container(
+            decoration: const BoxDecoration(
+              gradient: RadialGradient(
+                center: Alignment(-0.8, -0.6),
+                radius: 1.5,
+                colors: [
+                  AppColors.forestGreen,
+                  AppColors.black,
+                  AppColors.royalBlue,
+                  AppColors.black,
+                  AppColors.burgundy,
+                ],
+                stops: [0.0, 0.4, 0.6, 0.8, 1.0],
+              ),
+            ),
+          ),
+          Container(color: AppColors.black.withOpacity(0.85)),
+
+          // 2. Scrollable Content
+          SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              children: [
+                const SizedBox(height: 150),
+
+                // Hero Section
+                const HeroSection(),
+
+                // --- GATHERINGS ANCHOR ---
+                // This invisible 1px box is what Flutter scrolls to!
+                SizedBox(key: _gatheringsKey, height: 500),
+                // This 100px space serves two purposes:
+                // 1. Natural spacing between the Hero and Gatherings section.
+                // 2. The exact clearance needed so the navbar doesn't cover the glass pane!
+                const SizedBox(height: 300),
+
+                const ScrollReveal(child: GatheringsSection()), // Removed the key from here
+
+                // --- SOCIALS ANCHOR ---
+                SizedBox(key: _socialsKey, height: 10),
+                const SizedBox(height: 150),
+
+                const ScrollReveal(child: SocialsSection()), // Removed the key from here
+
+                // --- ABOUT ANCHOR ---
+                SizedBox(key: _aboutKey, height: 10),
+                const SizedBox(height: 150),
+
+                const ScrollReveal(child: StorySection()), // Removed the key from here
+
+                const SizedBox(height: 200), // Extra breathing room at the bottom
+              ],
+            ),
+          ),
+
+          // 3. Sticky Top Nav Bar
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: TopNavBar(
+              scrollController: _scrollController,
               onGatheringsTap: () => _scrollTo(_gatheringsKey),
               onSocialsTap: () => _scrollTo(_socialsKey),
               onAboutTap: () => _scrollTo(_aboutKey),
             ),
-            const HeroSection(),
-            GatheringsSection(key: _gatheringsKey),
-            SocialsSection(key: _socialsKey),
-            StorySection(key: _aboutKey),
-            const SizedBox(height: 100), // Bottom padding
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

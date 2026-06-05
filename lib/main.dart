@@ -50,12 +50,25 @@ class SaypiensApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final ScrollController _scrollController = ScrollController();
 
   final GlobalKey _gatheringsKey = GlobalKey();
   final GlobalKey _socialsKey = GlobalKey();
   final GlobalKey _aboutKey = GlobalKey();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   void _scrollTo(GlobalKey key) {
     final context = key.currentContext;
@@ -86,6 +99,7 @@ class HomePage extends StatelessWidget {
 
           // 2. Scrollable Content
           SingleChildScrollView(
+            controller: _scrollController,
             child: Column(
               children: [
                 const SizedBox(height: 100), // Pushes content below the sticky navbar
@@ -107,6 +121,7 @@ class HomePage extends StatelessWidget {
               onGatheringsTap: () => _scrollTo(_gatheringsKey),
               onSocialsTap: () => _scrollTo(_socialsKey),
               onAboutTap: () => _scrollTo(_aboutKey),
+              scrollController: _scrollController,
             ),
           ),
         ],
