@@ -1,12 +1,41 @@
+import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import '../../../../theme/app_color.dart';
 import '../../data/models/user_model.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
+
+
+
+Future<void> sendDiscordAlert({
+  required String name,
+  required String age,
+  required String reason
+}) async {
+  // PASTE YOUR COPIED URL HERE
+  const String webhookUrl = 'https://discord.com/api/webhooks/1524021326615019631/ScR7fyJMTBcjBJJhHcbAxJZmmNLvOozY1WPHA_UAjEhnMRFZSEgIGpmHU_-2IikWThXw';
+
+  // This formats the message to look clean and bold in Discord
+  final payload = {
+    "content": "🚀 **New Saypien Alert!**\n**Name:** $name (Age: $age)\n**Reason:** $reason"
+  };
+
+  try {
+    await http.post(
+      Uri.parse(webhookUrl),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(payload),
+    );
+    debugPrint("Discord alert sent!");
+  } catch (e) {
+    debugPrint("Failed to send Discord alert: $e");
+  }
+}
 
 class JoinSaypienDialog extends StatefulWidget {
   const JoinSaypienDialog({super.key});
@@ -147,6 +176,11 @@ class _JoinSaypienDialogState extends State<JoinSaypienDialog> {
                                   age: int.parse(_ageController.text.trim()),
                                   reason: _reasonController.text.trim(),
                                   insta: _instagramController.text.trim(),
+                                );
+                                sendDiscordAlert(
+                                  name: user.name,
+                                  age: user.age.toString(),
+                                  reason: user.reason,
                                 );
                                 context.read<HomeBloc>().add(SubmitSaypienForm(user));
                               }
