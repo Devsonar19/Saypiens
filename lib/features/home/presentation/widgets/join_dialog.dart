@@ -10,30 +10,40 @@ import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
 
-
-
-Future<void> sendDiscordAlert({
+Future<void> sendNativePushAlert({
   required String name,
   required String age,
   required String reason
 }) async {
-  const String webhookUrl = 'https://discord.com/api/webhooks/1524021326615019631/ScR7fyJMTBcjBJJhHcbAxJZmmNLvOozY1WPHA_UAjEhnMRFZSEgIGpmHU_-2IikWThXw';
+  // OneSignal's global API endpoint
+  const String onesignalApiUrl = 'https://onesignal.com/api/v1/notifications';
+
+  // PASTE YOUR ONESIGNAL KEYS HERE
+  const String appId = "07087478-9a56-4a2b-bdbd-a8948c773cb1";
+  const String restApiKey = "os_v2_app_a4ehi6e2kzfcxpn5vckiy5z4wgifnhutgp4u674hl7aczcwuou57leb5c4fo63ohcbzyc7jvdfc4eww62t7lvfc6ihd35733d2r5tiq";
 
   final payload = {
-    "content": "🚀 **New Saypien Alert!**\n**Name:** $name (Age: $age)\n**Reason:** $reason"
+    "app_id": appId,
+    "included_segments": ["All"],
+    "headings": {"en": "🚀 New Saypien Joined!"},
+    "contents": {"en": "$name (Age: $age) just applied.\nReason: $reason"}
   };
 
   try {
     await http.post(
-      Uri.parse(webhookUrl),
-      headers: {"Content-Type": "application/json"},
+      Uri.parse(onesignalApiUrl),
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization": "Basic $restApiKey"
+      },
       body: jsonEncode(payload),
     );
-    debugPrint("Discord alert sent!");
+    debugPrint("Native push notification sent!");
   } catch (e) {
-    debugPrint("Failed to send Discord alert: $e");
+    debugPrint("Failed to send push notification: $e");
   }
 }
+
 
 class JoinSaypienDialog extends StatefulWidget {
   const JoinSaypienDialog({super.key});
@@ -175,10 +185,11 @@ class _JoinSaypienDialogState extends State<JoinSaypienDialog> {
                                   reason: _reasonController.text.trim(),
                                   insta: _instagramController.text.trim(),
                                 );
-                                sendDiscordAlert(
-                                  name: user.name,
-                                  age: user.age.toString(),
-                                  reason: user.reason,
+                                
+                                sendNativePushAlert(
+                                    name: user.name,
+                                    age: user.age.toString(),
+                                    reason: user.reason,
                                 );
                                 context.read<HomeBloc>().add(SubmitSaypienForm(user));
                               }
