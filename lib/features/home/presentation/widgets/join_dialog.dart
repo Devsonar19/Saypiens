@@ -17,10 +17,8 @@ Future<void> sendDiscordAlert({
   required String age,
   required String reason
 }) async {
-  // PASTE YOUR COPIED URL HERE
   const String webhookUrl = 'https://discord.com/api/webhooks/1524021326615019631/ScR7fyJMTBcjBJJhHcbAxJZmmNLvOozY1WPHA_UAjEhnMRFZSEgIGpmHU_-2IikWThXw';
 
-  // This formats the message to look clean and bold in Discord
   final payload = {
     "content": "🚀 **New Saypien Alert!**\n**Name:** $name (Age: $age)\n**Reason:** $reason"
   };
@@ -75,7 +73,7 @@ class _JoinSaypienDialogState extends State<JoinSaypienDialog> {
           filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
           child: Container(
             constraints: const BoxConstraints(maxWidth: 550),
-            padding: const EdgeInsets.all(40.0),
+            padding: const EdgeInsets.all(20.0),
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.4), // Dark tint for readability
               borderRadius: BorderRadius.circular(24),
@@ -151,7 +149,7 @@ class _JoinSaypienDialogState extends State<JoinSaypienDialog> {
                         _buildGlassField(_instagramController, 'Instagram ID', Icons.alternate_email, isRequired: false),
                         const SizedBox(height: 20),
 
-                        _buildGlassField(_reasonController, 'Why do you want to join?*', Icons.edit_note, maxLines: 3),
+                        _buildGlassField(_reasonController, 'Why do you want to join?*', Icons.edit_note, maxLines: 3, isLast: true),
                         const SizedBox(height: 40),
 
                         // Submit Button
@@ -221,11 +219,18 @@ class _JoinSaypienDialogState extends State<JoinSaypienDialog> {
         bool isNumber = false,
         bool isRequired = true,
         int maxLines = 1,
+        bool isLast = false,
       }) {
     return TextFormField(
+      scrollPadding: const EdgeInsets.all(120.0),
+      textInputAction: isLast ? TextInputAction.done : (maxLines > 1 ? TextInputAction.newline : TextInputAction.next),
       controller: controller,
       maxLines: maxLines,
-      keyboardType: isEmail ? TextInputType.emailAddress : (isPhone || isNumber ? TextInputType.number : TextInputType.text),
+      keyboardType: isEmail
+          ? TextInputType.emailAddress
+          : (isPhone || isNumber
+                ? TextInputType.number
+                : (maxLines > 1 ? TextInputType.multiline : TextInputType.text)),
       style: GoogleFonts.lato(color: AppColors.platinum, fontSize: 15),
       cursorColor: AppColors.golden,
       validator: (val) {
