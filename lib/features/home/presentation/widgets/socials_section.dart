@@ -70,7 +70,8 @@ class SocialsSection extends StatelessWidget {
                       _HoverSocialChip(icon: FontAwesomeIcons.layerGroup, label: 'Substack', onTap: () => _launchSocial("https://substack.com/@saypiens")),
                       _HoverSocialChip(icon: FontAwesomeIcons.youtube, label: 'YouTube', onTap: () => _launchSocial("https://youtube.com/@saypiens?si=roKO4EXFbd2iGVQZ")),
                       _HoverSocialChip(icon: FontAwesomeIcons.threads, label: 'Threads', onTap: () => _launchSocial("https://www.threads.com/@saypienss?xmt=AQG0Pio9ZLdFUe7lbgxZh_YRGHDxs5oNnOU6RmlJn5irDJREClwh35_W6tgwbhEwM17agzA")),
-                      _HoverSocialChip(icon: FontAwesomeIcons.whatsapp, label: 'WhatsApp Community', onTap: () => _launchSocial("https://chat.whatsapp.com/ESg5RG2cQ6a4LYsnqwYcfq"))
+                      _HoverSocialChip(icon: FontAwesomeIcons.whatsapp, label: 'WhatsApp Community', onTap: () => _launchSocial("https://chat.whatsapp.com/ESg5RG2cQ6a4LYsnqwYcfq")),
+                      _HoverSocialChip(icon: FontAwesomeIcons.pinterest, label: 'Pinterest', onTap: () =>_launchSocial("https://in.pinterest.com/saypiens/"))
                     ],
                   ),
                 ],
