@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../theme/app_color.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:simple_icons/simple_icons.dart';
 
 class SocialsSection extends StatelessWidget {
   const SocialsSection({super.key});
@@ -66,8 +67,10 @@ class SocialsSection extends StatelessWidget {
                       _HoverSocialChip(icon: FontAwesomeIcons.facebookF, label: 'Facebook', onTap: () => _launchSocial("https://www.facebook.com/profile.php?id=61590641241593")),
                       _HoverSocialChip(icon: FontAwesomeIcons.linkedinIn, label: 'LinkedIn', onTap: () => _launchSocial("https://www.linkedin.com/in/saypiens-91b426412/")),
                       _HoverSocialChip(icon: FontAwesomeIcons.reddit, label: 'Reddit', onTap: () => _launchSocial("https://www.reddit.com/r/Saypiens/")),
+                      _HoverSocialChip(icon: FontAwesomeIcons.layerGroup, label: 'Substack', onTap: () => _launchSocial("https://substack.com/@saypiens")),
                       _HoverSocialChip(icon: FontAwesomeIcons.youtube, label: 'YouTube', onTap: () => _launchSocial("https://youtube.com/@saypiens?si=roKO4EXFbd2iGVQZ")),
-                      _HoverSocialChip(icon: FontAwesomeIcons.threads, label: 'Threads', onTap: () => _launchSocial("https://www.threads.com/@saypienss?xmt=AQG0Pio9ZLdFUe7lbgxZh_YRGHDxs5oNnOU6RmlJn5irDJREClwh35_W6tgwbhEwM17agzA"))
+                      _HoverSocialChip(icon: FontAwesomeIcons.threads, label: 'Threads', onTap: () => _launchSocial("https://www.threads.com/@saypienss?xmt=AQG0Pio9ZLdFUe7lbgxZh_YRGHDxs5oNnOU6RmlJn5irDJREClwh35_W6tgwbhEwM17agzA")),
+                      _HoverSocialChip(icon: FontAwesomeIcons.whatsapp, label: 'WhatsApp Community', onTap: () => _launchSocial("https://chat.whatsapp.com/ESg5RG2cQ6a4LYsnqwYcfq"))
                     ],
                   ),
                 ],

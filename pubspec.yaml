@@ -43,6 +43,7 @@ dependencies:
   url_launcher: ^6.3.2
   visibility_detector: ^0.4.0+2
   http: ^1.6.0
+  simple_icons: ^16.23.0
 
 dev_dependencies:
   flutter_test:
