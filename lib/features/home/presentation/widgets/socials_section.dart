@@ -4,7 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../theme/app_color.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:simple_icons/simple_icons.dart';
 
 class SocialsSection extends StatelessWidget {
   const SocialsSection({super.key});
@@ -16,6 +15,19 @@ class SocialsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, dynamic>> socials = [
+      {'icon': FontAwesomeIcons.instagram, 'label': 'Instagram', 'url': 'https://www.instagram.com/saypienss/'},
+      {'icon': FontAwesomeIcons.xTwitter, 'label': 'X', 'url': 'https://x.com/Saypiens_1'},
+      {'icon': FontAwesomeIcons.facebookF, 'label': 'Facebook', 'url': 'https://www.facebook.com/profile.php?id=61590641241593'},
+      {'icon': FontAwesomeIcons.linkedinIn, 'label': 'LinkedIn', 'url': 'https://www.linkedin.com/in/saypiens-91b426412/'},
+      {'icon': FontAwesomeIcons.reddit, 'label': 'Reddit', 'url': 'https://www.reddit.com/r/Saypiens/'},
+      {'icon': FontAwesomeIcons.layerGroup, 'label': 'Substack', 'url': 'https://substack.com/@saypiens'},
+      {'icon': FontAwesomeIcons.youtube, 'label': 'YouTube', 'url': 'https://youtube.com/@saypiens?si=roKO4EXFbd2iGVQZ'},
+      {'icon': FontAwesomeIcons.threads, 'label': 'Threads', 'url': 'https://www.threads.com/@saypienss?xmt=AQG0Pio9ZLdFUe7lbgxZh_YRGHDxs5oNnOU6RmlJn5irDJREClwh35_W6tgwbhEwM17agzA'},
+      {'icon': FontAwesomeIcons.squareWhatsapp, 'label': 'WhatsApp Community', 'url': 'https://chat.whatsapp.com/ESg5RG2cQ6a4LYsnqwYcfq'},
+      {'icon': FontAwesomeIcons.pinterest, 'label': 'Pinterest', 'url': 'https://in.pinterest.com/saypiens/'}
+    ];
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 20),
@@ -27,7 +39,7 @@ class SocialsSection extends StatelessWidget {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 40),
+              padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 24),
               decoration: BoxDecoration(
                 color: AppColors.platinum.withOpacity(0.02),
                 borderRadius: BorderRadius.circular(40),
@@ -57,22 +69,39 @@ class SocialsSection extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 48),
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 20,
-                    runSpacing: 20,
-                    children: [
-                      _HoverSocialChip(icon: FontAwesomeIcons.instagram, label: 'Instagram', onTap: () => _launchSocial("https://www.instagram.com/saypienss/")),
-                      _HoverSocialChip(icon: FontAwesomeIcons.xTwitter, label: 'X', onTap: () => _launchSocial("https://x.com/Saypiens_1")),
-                      _HoverSocialChip(icon: FontAwesomeIcons.facebookF, label: 'Facebook', onTap: () => _launchSocial("https://www.facebook.com/profile.php?id=61590641241593")),
-                      _HoverSocialChip(icon: FontAwesomeIcons.linkedinIn, label: 'LinkedIn', onTap: () => _launchSocial("https://www.linkedin.com/in/saypiens-91b426412/")),
-                      _HoverSocialChip(icon: FontAwesomeIcons.reddit, label: 'Reddit', onTap: () => _launchSocial("https://www.reddit.com/r/Saypiens/")),
-                      _HoverSocialChip(icon: FontAwesomeIcons.layerGroup, label: 'Substack', onTap: () => _launchSocial("https://substack.com/@saypiens")),
-                      _HoverSocialChip(icon: FontAwesomeIcons.youtube, label: 'YouTube', onTap: () => _launchSocial("https://youtube.com/@saypiens?si=roKO4EXFbd2iGVQZ")),
-                      _HoverSocialChip(icon: FontAwesomeIcons.threads, label: 'Threads', onTap: () => _launchSocial("https://www.threads.com/@saypienss?xmt=AQG0Pio9ZLdFUe7lbgxZh_YRGHDxs5oNnOU6RmlJn5irDJREClwh35_W6tgwbhEwM17agzA")),
-                      _HoverSocialChip(icon: FontAwesomeIcons.whatsapp, label: 'WhatsApp Community', onTap: () => _launchSocial("https://chat.whatsapp.com/ESg5RG2cQ6a4LYsnqwYcfq")),
-                      _HoverSocialChip(icon: FontAwesomeIcons.pinterest, label: 'Pinterest', onTap: () =>_launchSocial("https://in.pinterest.com/saypiens/"))
-                    ],
+
+                  // --- RESPONSIVE GRID MAGIC ---
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      const double spacing = 16.0;
+
+                      // Dynamically calculate columns based on screen width
+                      int columns = 2; // Default for mobile
+                      if (constraints.maxWidth >= 800) {
+                        columns = 4; // Desktop
+                      } else if (constraints.maxWidth >= 600) {
+                        columns = 3; // Tablet
+                      }
+
+                      // Mathematically calculate the exact width for each chip
+                      // We use .floorToDouble() to prevent sub-pixel rounding errors that break Wrap
+                      final double itemWidth = ((constraints.maxWidth - (spacing * (columns - 1))) / columns).floorToDouble();
+
+                      return Wrap(
+                        spacing: spacing,
+                        runSpacing: spacing,
+                        children: socials.map((social) {
+                          return SizedBox(
+                            width: itemWidth,
+                            child: _HoverSocialChip(
+                              icon: social['icon'],
+                              label: social['label'],
+                              onTap: () => _launchSocial(social['url']),
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -84,17 +113,20 @@ class SocialsSection extends StatelessWidget {
   }
 }
 
-// Keep your existing _HoverSocialChip class here below...
 class _HoverSocialChip extends StatefulWidget {
   final FaIconData icon;
   final String label;
   final VoidCallback onTap;
+
   const _HoverSocialChip({required this.icon, required this.label, required this.onTap});
+
   @override
   State<_HoverSocialChip> createState() => _HoverSocialChipState();
 }
+
 class _HoverSocialChipState extends State<_HoverSocialChip> {
   bool _isHovered = false;
+
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
@@ -105,7 +137,7 @@ class _HoverSocialChipState extends State<_HoverSocialChip> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOutCubic,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           decoration: BoxDecoration(
             color: _isHovered ? AppColors.golden.withOpacity(0.1) : Colors.black.withOpacity(0.3),
             borderRadius: BorderRadius.circular(16),
@@ -115,16 +147,19 @@ class _HoverSocialChipState extends State<_HoverSocialChip> {
             ),
           ),
           child: Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center, // Centers the content!
             children: [
-              FaIcon(widget.icon, color: _isHovered ? AppColors.golden : AppColors.platinum.withOpacity(0.8), size: 20),
+              FaIcon(widget.icon, color: _isHovered ? AppColors.golden : AppColors.platinum.withOpacity(0.8), size: 18),
               const SizedBox(width: 12),
-              Text(
-                widget.label,
-                style: GoogleFonts.lato(
-                  color: _isHovered ? AppColors.golden : AppColors.platinum.withOpacity(0.9),
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: 1.1,
+              Flexible( // Swapped Expanded for Flexible
+                child: Text(
+                  widget.label,
+                  style: GoogleFonts.lato(
+                    color: _isHovered ? AppColors.golden : AppColors.platinum.withOpacity(0.9),
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: 1.1,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
