@@ -260,8 +260,8 @@ class HeroSection extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: RadialGradient(
                   colors: [
-                    AppColors.primaryContainer.withOpacity(0.25),
-                    AppColors.primary.withOpacity(0.10),
+                    AppColors.primaryContainer.withValues(alpha: 0.25),
+                    AppColors.primary.withValues(alpha: 0.10),
                     Colors.transparent,
                   ],
                   stops: const [0.0, 0.4, 1.0],
@@ -372,10 +372,10 @@ class _HoverOutlinedButtonState extends State<HoverOutlinedButton> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             border: Border.all(
-              color: _isHovered ? AppColors.onSurface : AppColors.outlineVariant.withOpacity(0.5),
+              color: _isHovered ? AppColors.onSurface : AppColors.outlineVariant.withValues(alpha: 0.5),
               width: 1.5,
             ),
-            color: _isHovered ? AppColors.onSurface.withOpacity(0.05) : Colors.transparent,
+            color: _isHovered ? AppColors.onSurface.withValues(alpha: 0.05) : Colors.transparent,
           ),
           child: Text(
             widget.text,

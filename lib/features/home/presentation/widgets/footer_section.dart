@@ -107,7 +107,7 @@ class FooterSection extends StatelessWidget {
                   children: [
                     topSection,
                     const SizedBox(height: 80),
-                    Divider(color: AppColors.onTertiaryFixed.withOpacity(0.15)),
+                    Divider(color: AppColors.onTertiaryFixed.withValues(alpha: 0.15)),
                     const SizedBox(height: 24),
                     if (isMobile)
                       Column(
@@ -220,7 +220,7 @@ class _ContactEmailItemState extends State<_ContactEmailItem> {
               child: Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: _isHovered ? AppColors.onTertiaryFixed.withOpacity(0.05) : Colors.transparent,
+                  color: _isHovered ? AppColors.onTertiaryFixed.withValues(alpha: 0.05) : Colors.transparent,
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Icon(Icons.copy, size: 16, color: AppColors.onTertiaryFixedVariant),

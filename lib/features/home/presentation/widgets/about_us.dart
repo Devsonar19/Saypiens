@@ -54,7 +54,7 @@ class AboutUsSection extends StatelessWidget {
                     fontSize: 28,
                     fontWeight: FontWeight.w400,
                     height: 1.5,
-                    color: AppColors.onSurfaceVariant.withOpacity(0.9),
+                    color: AppColors.onSurfaceVariant.withValues(alpha: 0.9),
                     fontStyle: FontStyle.italic,
                   ),
                 ),

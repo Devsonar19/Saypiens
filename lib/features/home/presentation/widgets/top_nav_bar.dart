@@ -118,7 +118,7 @@ class TopNavBar extends StatelessWidget {
           color: AppColors.surfaceContainerLowest,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
-            side: BorderSide(color: AppColors.outlineVariant.withOpacity(0.3), width: 1),
+            side: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.3), width: 1),
           ),
           elevation: 12,
         ),
@@ -214,13 +214,13 @@ class TopNavBar extends StatelessWidget {
         color: AppColors.surfaceContainerLowest,
         border: Border(
           bottom: BorderSide(
-            color: Colors.white.withOpacity(0.08),
+            color: Colors.white.withValues(alpha: 0.08),
             width: 1.0,
           ),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.5),
+            color: Colors.black.withValues(alpha: 0.5),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

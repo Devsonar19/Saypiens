@@ -138,13 +138,13 @@ class _HoverSocialBoxState extends State<_HoverSocialBox> {
             color: AppColors.surfaceContainerHigh, // Solid background, no transparency
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: showActiveState ? widget.color.withOpacity(0.5) : Colors.white.withOpacity(0.05),
+              color: showActiveState ? widget.color.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.05),
               width: 1,
             ),
             boxShadow: showActiveState
                 ? [
                     BoxShadow(
-                      color: widget.color.withOpacity(0.15),
+                      color: widget.color.withValues(alpha: 0.15),
                       blurRadius: 20,
                       spreadRadius: 2,
                     )
@@ -159,12 +159,12 @@ class _HoverSocialBoxState extends State<_HoverSocialBox> {
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeOutBack,
                 child: widget.icon is Widget Function(Color)
-                    ? (widget.icon as Widget Function(Color))(showActiveState ? widget.color : Colors.white.withOpacity(0.7))
+                    ? (widget.icon as Widget Function(Color))(showActiveState ? widget.color : Colors.white.withValues(alpha: 0.7))
                     : widget.icon is Widget
                         ? widget.icon
                         : FaIcon(
                             widget.icon,
-                            color: showActiveState ? widget.color : Colors.white.withOpacity(0.7),
+                            color: showActiveState ? widget.color : Colors.white.withValues(alpha: 0.7),
                             size: 28,
                           ),
               ),
@@ -174,7 +174,7 @@ class _HoverSocialBoxState extends State<_HoverSocialBox> {
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: showActiveState ? Colors.white : Colors.white.withOpacity(0.7),
+                  color: showActiveState ? Colors.white : Colors.white.withValues(alpha: 0.7),
                   letterSpacing: 0.5,
                 ),
               ),

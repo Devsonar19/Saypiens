@@ -27,7 +27,7 @@ class InteractiveDotGridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final double globalOpacity = 0.15 + (0.10 * breathingValue); // breathes between 0.15 and 0.25
-    final basePaint = Paint()..color = color.withOpacity(globalOpacity);
+    final basePaint = Paint()..color = color.withValues(alpha: globalOpacity);
 
     const double interactionRadius = 160.0;
 
@@ -43,8 +43,8 @@ class InteractiveDotGridPainter extends CustomPainter {
           
           final paint = Paint()
              ..color = Color.lerp(
-               color.withOpacity(globalOpacity), 
-               color.withOpacity(0.9), 
+               color.withValues(alpha: globalOpacity), 
+               color.withValues(alpha: 0.9), 
                intensity
              )!;
           canvas.drawCircle(dotPos, currentRadius, paint);

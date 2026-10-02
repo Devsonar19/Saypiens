@@ -4,7 +4,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../theme/app_color.dart';
 import '../../../../core/app_constants.dart';
-import 'glowing_border_button.dart';
 
 class GatheringsSection extends StatelessWidget {
   const GatheringsSection({super.key});
@@ -103,7 +102,7 @@ class GatheringsSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +117,7 @@ class GatheringsSection extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: AppColors.surfaceContainerHigh,
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.white.withOpacity(0.1)),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                 ),
                 child: Text(
                   'RECAP & HIGHLIGHTS',
@@ -153,7 +152,7 @@ class GatheringsSection extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerHigh.withOpacity(0.5),
+              color: AppColors.surfaceContainerHigh.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -192,7 +191,7 @@ class GatheringsSection extends StatelessWidget {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary.withOpacity(0.15),
+                        backgroundColor: AppColors.primary.withValues(alpha: 0.15),
                         foregroundColor: AppColors.primary,
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -279,14 +278,14 @@ class GatheringsSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF131B2A), // Slightly darker blue-slate
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Text(
         text,
         style: GoogleFonts.cormorantGaramond(
           fontSize: 20,
           fontStyle: FontStyle.italic,
-          color: Colors.white.withOpacity(0.9),
+          color: Colors.white.withValues(alpha: 0.9),
           height: 1.4,
         ),
       ),
@@ -306,7 +305,7 @@ class GatheringsSection extends StatelessWidget {
               text,
               style: GoogleFonts.plusJakartaSans(
                 fontSize: 15,
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
               ),
             ),
           ),
@@ -320,7 +319,7 @@ class GatheringsSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -330,12 +329,12 @@ class GatheringsSection extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerHigh.withOpacity(0.3),
+              color: AppColors.surfaceContainerHigh.withValues(alpha: 0.3),
               borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(16),
                 bottomRight: Radius.circular(16),
               ),
-              border: Border(top: BorderSide(color: Colors.white.withOpacity(0.05))),
+              border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05))),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -463,7 +462,7 @@ class _AutoScrollingGalleryState extends State<AutoScrollingGallery> {
                     item['text']!,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 15,
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withValues(alpha: 0.9),
                       height: 1.6,
                     ),
                   ),
@@ -514,18 +513,18 @@ class _UpcomingMeetupCardState extends State<UpcomingMeetupCard> with SingleTick
             gradient: SweepGradient(
               center: FractionalOffset.center,
               colors: [
-                AppColors.primary.withOpacity(0.1),
-                AppColors.primary.withOpacity(0.8),
-                AppColors.primary.withOpacity(0.1),
-                AppColors.primary.withOpacity(0.8),
-                AppColors.primary.withOpacity(0.1),
+                AppColors.primary.withValues(alpha: 0.1),
+                AppColors.primary.withValues(alpha: 0.8),
+                AppColors.primary.withValues(alpha: 0.1),
+                AppColors.primary.withValues(alpha: 0.8),
+                AppColors.primary.withValues(alpha: 0.1),
               ],
               stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
               transform: GradientRotation(_controller.value * 2 * 3.14159),
             ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 blurRadius: 20,
                 spreadRadius: 2,
               )
@@ -615,7 +614,7 @@ class _UpcomingMeetupCardState extends State<UpcomingMeetupCard> with SingleTick
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFF2B3241), // Greyed out surface color
-        foregroundColor: Colors.white.withOpacity(0.8),
+        foregroundColor: Colors.white.withValues(alpha: 0.8),
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),

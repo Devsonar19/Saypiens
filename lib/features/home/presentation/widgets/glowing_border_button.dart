@@ -66,7 +66,7 @@ class _GlowingBorderButtonState extends State<GlowingBorderButton> with SingleTi
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFB8860B).withOpacity(_isHovered ? 0.6 : 0.3),
+                      color: const Color(0xFFB8860B).withValues(alpha: _isHovered ? 0.6 : 0.3),
                       blurRadius: _isHovered ? 20 : 12,
                       spreadRadius: _isHovered ? 4 : 2,
                     )
