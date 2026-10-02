@@ -1,14 +1,78 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_color.dart';
+import 'glowing_border_button.dart';
+
+import 'package:google_fonts/google_fonts.dart';
+
+class HoverNavLink extends StatefulWidget {
+  final String text;
+  final VoidCallback onTap;
+
+  const HoverNavLink({super.key, required this.text, required this.onTap});
+
+  @override
+  State<HoverNavLink> createState() => _HoverNavLinkState();
+}
+
+class _HoverNavLinkState extends State<HoverNavLink> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOutCubic,
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: _isHovered ? const Color(0xFFB8860B) : Colors.transparent,
+                width: 2.0,
+              ),
+            ),
+          ),
+          child: AnimatedScale(
+            duration: const Duration(milliseconds: 250),
+            scale: _isHovered ? 1.05 : 1.0,
+            curve: Curves.easeOut,
+            child: AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOut,
+              style: GoogleFonts.syne(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: _isHovered ? const Color(0xFFB8860B) : AppColors.onSurfaceVariant,
+                letterSpacing: 1.2,
+              ),
+              child: Text(widget.text),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class TopNavBar extends StatelessWidget {
+  final VoidCallback onAboutTap;
   final VoidCallback onMeetupsTap;
   final VoidCallback onSocialsTap;
+  final bool showBecomeSaypien;
+  final VoidCallback? onBecomeSaypienTap;
 
   const TopNavBar({
     super.key,
+    required this.onAboutTap,
     required this.onMeetupsTap,
     required this.onSocialsTap,
+    this.showBecomeSaypien = false,
+    this.onBecomeSaypienTap,
   });
 
   @override
@@ -19,40 +83,27 @@ class TopNavBar extends StatelessWidget {
         color: AppColors.surfaceContainerLowest.withOpacity(0.8),
       ),
       child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1200),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Image.asset('assets/images/transparent_logo.png', height: 32),
-                    const SizedBox(width: 16),
-                    Text(
-                      'Saypiens',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: AppColors.onSurface,
-                      ),
-                    ),
-                  ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  HoverNavLink(text: 'About Us', onTap: onAboutTap),
+                  const SizedBox(width: 24),
+                  HoverNavLink(text: 'Meetups', onTap: onMeetupsTap),
+                  const SizedBox(width: 24),
+                  HoverNavLink(text: 'Socials', onTap: onSocialsTap),
+                ],
+              ),
+              if (showBecomeSaypien)
+                GlowingBorderButton(
+                  text: 'Become a Saypien',
+                  onTap: onBecomeSaypienTap ?? () {},
                 ),
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: onMeetupsTap,
-                      child: Text('Meetups', style: Theme.of(context).textTheme.labelLarge?.copyWith(color: AppColors.onSurfaceVariant)),
-                    ),
-                    const SizedBox(width: 24),
-                    TextButton(
-                      onPressed: onSocialsTap,
-                      child: Text('Socials', style: Theme.of(context).textTheme.labelLarge?.copyWith(color: AppColors.onSurfaceVariant)),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            ],
           ),
         ),
       ),
