@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AppColors {
+class AppTheme {
   static const Color surface = Color(0xFF091421);
   static const Color surfaceContainerLowest = Color(0xFF050F1C);
   static const Color surfaceContainer = Color(0xFF16202E);

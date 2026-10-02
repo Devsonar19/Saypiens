@@ -1,111 +1,96 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../theme/app_color.dart';
-import 'join_dialog.dart';
-import '../../../../core/app_constants.dart';
-import 'dart:ui';
 
-class HeroSection extends StatefulWidget {
-  const HeroSection({super.key});
+class HeroSection extends StatelessWidget {
+  final VoidCallback onJoinPressed;
+  final VoidCallback onExplorePressed;
 
-  @override
-  State<HeroSection> createState() => _HeroSectionState();
-}
-
-class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStateMixin {
-  bool _isHovered = false;
-  late AnimationController _shimmerController;
-  late Animation<double> _shimmerAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _shimmerController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 3),
-    )..repeat(reverse: true);
-
-    _shimmerAnimation = Tween<double>(begin: 0.1, end: 0.4).animate(
-      CurvedAnimation(parent: _shimmerController, curve: Curves.easeInOutSine),
-    );
-  }
-
-  @override
-  void dispose() {
-    _shimmerController.dispose();
-    super.dispose();
-  }
+  const HeroSection({
+    super.key,
+    required this.onJoinPressed,
+    required this.onExplorePressed,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 768;
-
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.7,
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          MouseRegion(
-            onEnter: (_) => setState(() => _isHovered = true),
-            onExit: (_) => setState(() => _isHovered = false),
-            child: GestureDetector(
-              onTap: () => showDialog(context: context, builder: (_) => const JoinSaypienDialog()),
-              child: AnimatedBuilder(
-                animation: _shimmerAnimation,
-                builder: (context, child) {
-                  final double glow = isMobile ? _shimmerAnimation.value : (_isHovered ? 0.3 : 0.0);
-                  final bool active = isMobile || _isHovered;
-
-                  return Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(40),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          padding: const EdgeInsets.symmetric(horizontal: 56, vertical: 28),
-                          decoration: BoxDecoration(
-                            color: AppColors.platinum.withOpacity(0.02),
-                            borderRadius: BorderRadius.circular(40),
-                            border: Border.all(
-                              color: active ? AppColors.golden : AppColors.platinum.withOpacity(0.15),
-                              width: 1.5,
-                            ),
-                            boxShadow: active
-                                ? [BoxShadow(color: AppColors.golden.withOpacity(glow), blurRadius: 40, spreadRadius: 5)]
-                                : [],
-                          ),
-                          child: child,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                child: Text(
-                  'BECOME A SAYPIEN',
-                  style: GoogleFonts.lato(
-                    color: AppColors.platinum,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w300, // Minimalistic, thin weight
-                    letterSpacing: 6,
-                  ),
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 900),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 64.0),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceContainerHigh,
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(color: AppColors.outlineVariant.withOpacity(0.4)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(width: 6, height: 6, decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle)),
+                    const SizedBox(width: 8),
+                    Text('THE INTELLECTUAL COMMONS // VOL. IV', style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.onSurfaceVariant, letterSpacing: 1.5)),
+                  ],
                 ),
               ),
-            ),
+              const SizedBox(height: 32),
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: Theme.of(context).textTheme.displayLarge,
+                  children: [
+                    const TextSpan(text: 'Say it '),
+                    TextSpan(
+                      text: 'out loud.',
+                      style: GoogleFonts.syne(
+                        color: AppColors.secondary,
+                        fontStyle: FontStyle.italic,
+                        shadows: [Shadow(color: AppColors.primary.withOpacity(0.3), blurRadius: 35)],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'A sanctuary for open minds, bold discourse, and creative intellects. Where unfiltered curiosity meets thoughtful dialogue across coffee, candlelit salons, and open manuscripts.',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              const SizedBox(height: 48),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: onJoinPressed,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.onPrimary,
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                      textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    child: const Text('Join the Movement'),
+                  ),
+                  const SizedBox(width: 16),
+                  OutlinedButton(
+                    onPressed: onExplorePressed,
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.onSurface,
+                      side: BorderSide(color: AppColors.outlineVariant.withOpacity(0.5)),
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                      textStyle: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    child: const Text('Explore the Codex'),
+                  ),
+                ],
+              ),
+            ],
           ),
-          const SizedBox(height: 48),
-          Text(
-            AppConstants.heroSubtitle,
-            style: GoogleFonts.playfairDisplay(
-              color: AppColors.platinum.withOpacity(0.6),
-              fontSize: 22,
-              fontStyle: FontStyle.italic,
-              letterSpacing: 2,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

@@ -1,233 +1,104 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../../theme/app_color.dart';
 
 class GatheringsSection extends StatelessWidget {
   const GatheringsSection({super.key});
 
-  // --- GOOGLE MAPS TRIGGER ---
-  Future<void> _openGoogleMaps() async {
-    final Uri mapsUrl = Uri.parse(
-        'https://www.google.com/maps/dir//Caffe+404,+G-11,+Aagam+Emporio,+University+Rd,+beside+GNine+Hotel,+Vesu,+Surat,+Gujarat+395007/@22.2887936,73.3642752,6897m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x3be04d86b604ef6d:0xe609b50805e8d092!2m2!1d72.7765729!2d21.1522332?entry=ttu&g_ep=EgoyMDI2MDgyMy4wIKXMDSoASAFQAw%3D%3D');
-
-    if (await canLaunchUrl(mapsUrl)) {
-      await launchUrl(mapsUrl, mode: LaunchMode.externalApplication);
-    } else {
-      debugPrint('Could not launch maps.');
-    }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: AppColors.surfaceContainerLowest,
+      padding: const EdgeInsets.symmetric(vertical: 64),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('EPISODE-1 // SAY IT!', style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.primary, letterSpacing: 2)),
+                const SizedBox(height: 8),
+                Text('Salon Debrief & Atmosphere', style: Theme.of(context).textTheme.headlineLarge),
+                const SizedBox(height: 48),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 7,
+                      child: _buildMeetupNotes(context),
+                    ),
+                    const SizedBox(width: 32),
+                    Expanded(
+                      flex: 5,
+                      child: Container(
+                        height: 400,
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceContainerHigh,
+                          borderRadius: BorderRadius.circular(16),
+                          image: const DecorationImage(
+                            image: NetworkImage('https://lh3.googleusercontent.com/aida-public/AB6AXuB1fffgQrjAel7UxNS3IxsHw2Oo5tE59b-YBAKiyNgkRTytScu5KLitIFzORdkdL-VbFkz6KyAtdjnEtSOctDfiYbytJ8uTpNG69vw6pVNpe5NzU26B337SLlZ5U4TpatFgwpzgs5fwYZuuIT_JbQaUtEmYO4hKCu36HmPB5wV9UzyNeExLH22Xb3HuLVuayZ7dP6LY86QcGbpaERoWGDPlvYDPoyR6NIeYC7KTUJCfSihHr2_9ZIU'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
-  // --- WHATSAPP TRIGGER ---
-  Future<void> _openWhatsApp() async {
-    final Uri waUrl = Uri.parse('https://chat.whatsapp.com/ESg5RG2cQ6a4LYsnqwYcfq');
-
-    if (await canLaunchUrl(waUrl)) {
-      await launchUrl(waUrl, mode: LaunchMode.externalApplication);
-    } else {
-      debugPrint('Could not launch WhatsApp.');
-    }
-  }
-
-  // --- RESPONSIVE INFO ROW ---
-  Widget _buildInfoRow(IconData icon, String text, bool isMobile, {Widget? trailing}) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: isMobile ? 16 : 20),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+  Widget _buildMeetupNotes(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(32),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainer,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.outlineVariant.withOpacity(0.4)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: EdgeInsets.all(isMobile ? 10 : 12),
-            decoration: BoxDecoration(
-              color: AppColors.golden.withOpacity(0.08),
-              shape: BoxShape.circle,
-              border: Border.all(color: AppColors.golden.withOpacity(0.2), width: 1),
-            ),
-            child: Icon(icon, color: AppColors.golden, size: isMobile ? 18 : 22),
-          ),
-          SizedBox(width: isMobile ? 12 : 20),
-          Expanded(
-            child: Text(
-              text,
-              style: GoogleFonts.outfit(
-                color: AppColors.platinum.withOpacity(0.9),
-                fontSize: isMobile ? 15 : 17,
-                fontWeight: FontWeight.w400,
-                letterSpacing: 0.3,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceContainerHigh,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+                ),
+                child: Text('Recap & Highlights', style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.secondary)),
               ),
-            ),
+              Text('180 Mins Uncut Dialogue', style: Theme.of(context).textTheme.bodySmall),
+            ],
           ),
-          if (trailing != null) ...[
-            SizedBox(width: isMobile ? 8 : 12),
-            trailing,
-          ]
+          const SizedBox(height: 24),
+          Text('The Motive // Dialectical Queries', style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.primary, letterSpacing: 1.5)),
+          const SizedBox(height: 16),
+          _buildQuoteCard(context, '“What happens when civil discourse confronts taboo curiosities in an algorithmic echo-chamber?”'),
+          const SizedBox(height: 8),
+          _buildQuoteCard(context, '“Why are contemporary intellectual spaces shedding nuance in favor of instant ideological consensus?”'),
         ],
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // --- RESPONSIVE CHECK ---
-    // If the screen is less than 600px wide, we treat it as a mobile device.
-    final bool isMobile = MediaQuery.of(context).size.width < 600;
-
+  Widget _buildQuoteCard(BuildContext context, String text) {
     return Container(
-      width: double.infinity,
-      // Reduce outer padding on mobile
-      padding: EdgeInsets.symmetric(vertical: isMobile ? 40 : 80, horizontal: isMobile ? 16 : 20),
-      alignment: Alignment.center,
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 1000),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(40),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-            child: Container(
-              // Reduce inner glass padding on mobile
-              padding: EdgeInsets.symmetric(vertical: isMobile ? 40 : 80, horizontal: isMobile ? 16 : 24),
-              decoration: BoxDecoration(
-                color: AppColors.platinum.withOpacity(0.03),
-                borderRadius: BorderRadius.circular(40),
-                border: Border.all(color: AppColors.platinum.withOpacity(0.08), width: 1),
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    'UPCOMING GATHERINGS',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.spaceGrotesk(
-                      color: AppColors.golden,
-                      fontSize: isMobile ? 14 : 16, // Smaller title on mobile
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 4.0,
-                    ),
-                  ),
-                  SizedBox(height: isMobile ? 32 : 56),
-
-                  Container(
-                    width: double.infinity,
-                    constraints: const BoxConstraints(maxWidth: 550),
-                    // Drastically reduce card padding on mobile to give text room to breathe
-                    padding: EdgeInsets.all(isMobile ? 24 : 48),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF0A0A0A).withOpacity(0.6),
-                      borderRadius: BorderRadius.circular(32),
-                      border: Border.all(color: AppColors.golden.withOpacity(0.2), width: 1),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 30,
-                          offset: const Offset(0, 15),
-                        )
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: AppColors.golden.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: AppColors.golden.withOpacity(0.3), width: 1),
-                          ),
-                          child: Text(
-                            'MEETUP #01',
-                            style: GoogleFonts.spaceGrotesk(
-                              color: AppColors.golden,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 2.0,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-
-                        Text(
-                          "Surat's First Ever\nGenZ Brainstorming Event",
-                          style: GoogleFonts.outfit(
-                            color: AppColors.platinum,
-                            // Scale down header font slightly for mobile
-                            fontSize: isMobile ? 26 : 32,
-                            fontWeight: FontWeight.w800,
-                            height: 1.2,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                        const SizedBox(height: 32),
-
-                        Divider(color: AppColors.platinum.withOpacity(0.1), thickness: 1),
-
-                        const SizedBox(height: 32),
-
-                        // Pass isMobile to the helper so it scales icons and text automatically
-                        _buildInfoRow(Icons.calendar_today_rounded, 'Sunday, 6th September, 2026', isMobile),
-                        _buildInfoRow(Icons.access_time_rounded, '4:30 PM - 6:30 PM', isMobile),
-
-                        _buildInfoRow(
-                          Icons.location_on_rounded,
-                          'Cafe 404, Vesu',
-                          isMobile,
-                          trailing: ElevatedButton.icon(
-                            icon: Icon(Icons.near_me_rounded, size: isMobile ? 14 : 16),
-                            label: Text(
-                              'MAP',
-                              style: GoogleFonts.spaceGrotesk(
-                                fontWeight: FontWeight.w700,
-                                fontSize: isMobile ? 11 : 13, // Smaller map button font
-                                letterSpacing: 1.0,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.golden.withOpacity(0.15),
-                              foregroundColor: AppColors.golden,
-                              elevation: 0,
-                              // Tighter button padding on mobile
-                              padding: EdgeInsets.symmetric(horizontal: isMobile ? 12 : 16, vertical: isMobile ? 8 : 12),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                            ),
-                            onPressed: _openGoogleMaps,
-                          ),
-                        ),
-
-                        SizedBox(height: isMobile ? 16 : 24),
-
-                        // --- PRIMARY BUTTON: WHATSAPP ---
-                        SizedBox(
-                          width: double.infinity,
-                          height: isMobile ? 54 : 60, // Slightly shorter button on mobile
-                          child: ElevatedButton.icon(
-                            icon: const Icon(Icons.forum_rounded, size: 20),
-                            label: Text(
-                              'JOIN WHATSAPP',
-                              style: GoogleFonts.spaceGrotesk(
-                                fontWeight: FontWeight.w700,
-                                fontSize: isMobile ? 13 : 15,
-                                letterSpacing: 1.5,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.golden,
-                              foregroundColor: Colors.black,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                            ),
-                            onPressed: _openWhatsApp,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLowest.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.outlineVariant.withOpacity(0.2)),
       ),
+      child: Text(text, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic)),
     );
   }
 }

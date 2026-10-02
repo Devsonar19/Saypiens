@@ -1,6 +1,3 @@
 class AppConstants {
-  static const String saypiensCollection = 'saypiens';
-  static const String appTitle = 'Saypiens';
-  static const String heroSubtitle = 'OUT & ALIVE';
-  static const String noEventsMessage = 'No upcoming events at the moment. Stay tuned.';
+  static const String whatsappCommunityUrl = 'https://chat.whatsapp.com/your-invite-link';
 }
