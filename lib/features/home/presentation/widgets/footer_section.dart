@@ -11,7 +11,14 @@ class FooterSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: AppColors.tertiaryFixed,
+      decoration: const BoxDecoration(
+        color: AppColors.tertiaryFixed,
+        image: DecorationImage(
+          image: AssetImage('assets/images/footer_logo.png'),
+          fit: BoxFit.cover,
+          opacity: 0.07, // Very light and subtle
+        ),
+      ),
       padding: const EdgeInsets.symmetric(vertical: 80),
       child: Center(
         child: ConstrainedBox(

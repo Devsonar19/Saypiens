@@ -30,7 +30,10 @@ class _KineticTextRollerState extends State<KineticTextRoller> {
   @override
   void initState() {
     super.initState();
-    _startSequence();
+    // Wait a short while for webpage to fully load before starting animation
+    _timer = Timer(const Duration(milliseconds: 1500), () {
+      if (mounted) _startSequence();
+    });
   }
 
   void _startSequence() {
@@ -63,6 +66,11 @@ class _KineticTextRollerState extends State<KineticTextRoller> {
                   setState(() {
                     _isScaled = true;
                   });
+                  
+                  // Wait 5 seconds after completion, then repeat
+                  _timer = Timer(const Duration(seconds: 5), () {
+                    if (mounted) _startSequence();
+                  });
                 }
               });
             }
@@ -87,25 +95,25 @@ class _KineticTextRollerState extends State<KineticTextRoller> {
     final double fusedSize = isDesktop ? 100 : 55;
     final double targetFontSize = _isScaled ? fusedSize : baseSize;
     
-    final TextStyle prefixStyle = GoogleFonts.plusJakartaSans(
+    final TextStyle prefixStyle = GoogleFonts.libreCaslonText(
       fontSize: targetFontSize,
       fontWeight: FontWeight.w800,
       color: Colors.white,
-      letterSpacing: -2.0,
+      letterSpacing: -1.0,
     );
     
-    final TextStyle rollerStyle = GoogleFonts.plusJakartaSans(
+    final TextStyle rollerStyle = GoogleFonts.libreCaslonText(
       fontSize: baseSize,
       fontWeight: FontWeight.w800,
       color: const Color(0xFF94A3B8), // Slate gray
-      letterSpacing: -2.0,
+      letterSpacing: -1.0,
     );
 
-    final TextStyle fusedStyle = GoogleFonts.plusJakartaSans(
+    final TextStyle fusedStyle = GoogleFonts.libreCaslonText(
       fontSize: targetFontSize,
       fontWeight: FontWeight.w800,
       color: const Color(0xFFB8860B), // Goldenrod accent
-      letterSpacing: -2.0,
+      letterSpacing: -1.0,
     );
 
     // The gap between "Say" and the suffix shrinks to 0 when fused
@@ -235,19 +243,50 @@ class HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 700;
+
     return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 900),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 64.0),
-          child: Column(
-            children: [
+      child: Stack(
+        alignment: Alignment.center,
+        clipBehavior: Clip.none,
+        children: [
+          // Fainted Gradient Glow Background (Positioned to avoid increasing page size)
+          Positioned(
+            left: -500,
+            right: -500,
+            top: -300,
+            bottom: -300,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [
+                    AppColors.primaryContainer.withOpacity(0.25),
+                    AppColors.primary.withOpacity(0.10),
+                    Colors.transparent,
+                  ],
+                  stops: const [0.0, 0.4, 1.0],
+                  radius: 0.5,
+                  center: const Alignment(0.0, -0.15), // Focused higher up on the animation
+                ),
+              ),
+            ),
+          ),
+          // Foreground Content
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 900),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 64.0),
+              child: Column(
+                children: [
               // New Kinetic Text Roller
-              const KineticTextRoller(),
+              const FittedBox(
+                fit: BoxFit.scaleDown,
+                child: KineticTextRoller(),
+              ),
 
               const SizedBox(height: 32),
               Text(
-                '“A team that believes in offline connection,\nrather than online presence.”',
+                '“Offline Human Connection,\nrather than online Algorithms.”',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontStyle: FontStyle.italic,
@@ -256,23 +295,46 @@ class HeroSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 48),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GlowingBorderButton(
-                    text: 'Join Us',
-                    onTap: onJoinPressed,
-                  ),
-                  const SizedBox(width: 24),
-                  HoverOutlinedButton(
-                    text: 'Connect With Us',
-                    onTap: onExplorePressed,
-                  ),
-                ],
-              ),
+              if (isMobile)
+                Column(
+                  children: [
+                    Transform.scale(
+                      scale: 1.15,
+                      child: GlowingBorderButton(
+                        text: 'Become a Saypien',
+                        onTap: onJoinPressed,
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    HoverOutlinedButton(
+                      text: 'Connect With Us',
+                      onTap: onExplorePressed,
+                    ),
+                  ],
+                )
+              else
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Transform.scale(
+                      scale: 1.1,
+                      child: GlowingBorderButton(
+                        text: 'Become a Saypien',
+                        onTap: onJoinPressed,
+                      ),
+                    ),
+                    const SizedBox(width: 32),
+                    HoverOutlinedButton(
+                      text: 'Connect With Us',
+                      onTap: onExplorePressed,
+                    ),
+                  ],
+                ),
             ],
           ),
         ),
+      ),
+        ],
       ),
     );
   }

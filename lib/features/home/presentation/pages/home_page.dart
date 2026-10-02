@@ -133,11 +133,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.surface,
-      body: MouseRegion(
-        onHover: (event) => _mousePosition.value = event.localPosition,
-        onExit: (event) => _mousePosition.value = const Offset(-1000, -1000),
-        child: Stack(
-          children: [
+      body: Listener(
+        onPointerMove: (event) => _mousePosition.value = event.localPosition,
+        onPointerHover: (event) => _mousePosition.value = event.localPosition,
+        onPointerUp: (event) => _mousePosition.value = const Offset(-1000, -1000),
+        child: MouseRegion(
+          onHover: (event) => _mousePosition.value = event.localPosition,
+          onExit: (event) => _mousePosition.value = const Offset(-1000, -1000),
+          child: Stack(
+            children: [
             Positioned.fill(
               child: AnimatedBuilder(
                 animation: _breathingController,
@@ -190,6 +194,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           ),
         ],
       ),
+        ),
       ),
     );
   }

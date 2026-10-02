@@ -108,8 +108,10 @@ class GatheringsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            runSpacing: 12,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -129,6 +131,7 @@ class GatheringsSection extends StatelessWidget {
                 ),
               ),
               Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.access_time, color: AppColors.primary, size: 16),
                   const SizedBox(width: 8),
@@ -378,23 +381,23 @@ class _AutoScrollingGalleryState extends State<AutoScrollingGallery> {
   
   final List<Map<String, String>> galleryItems = [
     {
-      'image': 'assets/images/meetup1.jpg',
+      'image': 'assets/images/meetup1_v2.jpg',
       'text': '"Connect with someone today, reflect on what their words stirred in you, and let that quiet moment remind you how much you\'ve already grown."'
     },
     {
-      'image': 'assets/images/meetup2.jpg',
+      'image': 'assets/images/meetup2_v2.jpg',
       'text': '"Progress isn\'t a race against anyone else\'s timeline, so stop comparing your chapter one to someone\'s chapter twenty and simply keep trying."'
     },
     {
-      'image': 'assets/images/meetup3.jpg',
+      'image': 'assets/images/meetup3_v2.jpg',
       'text': '"Your feelings are valid signals, not burdens, express your emotions honestly instead of carrying them silently."'
     },
     {
-      'image': 'assets/images/meetup4.jpg',
+      'image': 'assets/images/meetup4_v2.jpg',
       'text': '"Growth happens in the small, stubborn moments when you choose to keep trying even after setbacks leave you doubting yourself."'
     },
     {
-      'image': 'assets/images/meetup5.jpg',
+      'image': 'assets/images/meetup5_v2.jpg',
       'text': '"End every day the way you\'d want to be treated, with kindness toward others and a little grace toward yourself."'
     },
   ];
